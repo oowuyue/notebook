@@ -1,3 +1,4 @@
+<?php
 
 $fArray = array();
 
