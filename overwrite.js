@@ -1,4 +1,4 @@
-var a = {
+        var a = {
             "dbInfo": {
                 "host": "102.24.32.626",
                 "username": "root",
