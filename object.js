@@ -29,7 +29,7 @@ var foo2 = (function() {
 }());//定义一个函数并立刻调用
 
 console.log(foo2.get_secret());
-console.log(foo2.secret); // fale
+console.log(foo2.secret); // fale 不能从外部访问 实现了类似private
 foo2.set_secret('a new secret');
 console.log(foo2.get_secret());
 console.log('--------------------------------------------------');
@@ -75,3 +75,10 @@ console.log(foo3.secret);
 foo3.set_secret('a new secret');
 console.log(foo3.get_secret());
 console.log('--------------------------------------------------');
+
+
+
+// http://www.zhihu.com/question/20292224
+// http://www.zhihu.com/question/20348948
+// http://www.zhihu.com/question/19554716
+// http://www.zhihu.com/question/19636194/answer/12504495
