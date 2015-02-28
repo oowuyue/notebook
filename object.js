@@ -82,3 +82,5 @@ console.log('--------------------------------------------------');
 // http://www.zhihu.com/question/20348948
 // http://www.zhihu.com/question/19554716
 // http://www.zhihu.com/question/19636194/answer/12504495
+//call和apply操作符可以随意改变this指向
+//匿名函数的this指向是window
