@@ -104,3 +104,4 @@ $xml = xmlstr_to_array(curlGet('http://www.lieqi.me/2345a/lieqi.xml'));
 echo "<pre>";
 print_r(array_iconv('utf-8', 'gbk', $xml));
 echo "</pre>";
+
