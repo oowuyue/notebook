@@ -93,7 +93,6 @@ foreach ($fArray as $fName => $count)
 EOD;
 }
 
-
 echo<<<EOD
 </table> 
 </body>
