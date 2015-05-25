@@ -77,7 +77,6 @@ console.log(foo3.get_secret());
 console.log('--------------------------------------------------');
 
 
-
 // http://www.zhihu.com/question/20292224
 // http://www.zhihu.com/question/20348948
 // http://www.zhihu.com/question/19554716
