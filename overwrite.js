@@ -65,5 +65,4 @@
             return json1;
         }
  
- 
         console.log(multi_array_merge(a, b));
