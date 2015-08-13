@@ -35,7 +35,7 @@ function domnode_to_array($node)
         case XML_TEXT_NODE:
             $output = trim($node->textContent);
             break;
-        case XML_ELEMENT_NODE:
+        case XML_ELEMENT_NODE: 
             for ($i = 0, $m = $node->childNodes->length; $i < $m; $i++)
             {
                 $child = $node->childNodes->item($i);
