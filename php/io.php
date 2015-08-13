@@ -67,3 +67,4 @@ if ($logged_in) {
 else {
     echo 'Tabatha says you haven\'t paid.';
 }
+ 
