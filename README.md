@@ -5,3 +5,5 @@ df dfsdfsd
 a commit
 
 a stageing
+
+a worktree
