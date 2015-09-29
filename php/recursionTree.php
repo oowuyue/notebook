@@ -4,6 +4,8 @@
 https://en.wikipedia.org/wiki/Nested_set_model
 https://ruby-china.org/topics/2533
 http://docs.mongodb.org/manual/tutorial/model-tree-structures/
+
+https://app.yinxiang.com/shard/s21/res/19546815-d42c-4976-84b4-930c904c3af2/QQ%E6%88%AA%E5%9B%BE20150929103654.png?resizeSmall&width=1600
 */
 
 $comments = [
