@@ -1,0 +1,292 @@
+html {
+    background: rgba(0, 0, 0, 0) url("gggg.jpg") repeat-x fixed center top;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    padding: 0px;
+}
+
+li {
+    list-style: none;
+}
+
+
+/****/
+
+.top {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 42px;
+    background-color: black;
+    color: white;
+}
+
+.top_inner {
+    width: 92%;
+    margin: 0 auto;
+}
+
+.top_inner a {
+    color: red;
+    text-decoration: none;
+}
+
+.logo,
+.nav,
+.profile,
+.search {
+    height: 42px;
+    line-height: 42px;
+    vertical-align: middle;
+}
+
+.logo {
+    float: left;
+}
+
+.nav {
+    float: left;
+    margin-left: 15px;
+}
+
+.nav a {
+    background: rgba(0, 0, 0, 0) url("http://www.rs05.com/img/i.png") no-repeat scroll 10px top;
+    color: #fff;
+    float: left;
+    font-size: 90%;
+    background-position: 10px -30px;
+    padding: 0 10px 0 35px;
+}
+
+.nav a:nth-child(2) {
+    background-position: 10px -60px;
+}
+
+.nav a:nth-child(3) {
+    background-position: 10px -90px;
+}
+
+.nav a:nth-child(4) {
+    background-position: 10px -120px;
+}
+
+.nav a:nth-child(5) {
+    background-position: 10px -150px;
+}
+
+.profile {
+    float: right;
+    margin-left: 25px;
+    color: #fff;
+    font-size: 90%;
+    padding: 0 5px;
+}
+
+.search {
+    float: right;
+}
+
+.search input {
+    border: 1px solid #04aeda;
+    display: inline-block;
+    line-height: 25px;
+    vertical-align: middle;
+    border-radius: 3px;
+}
+
+.search button {
+    border: 1px solid #04aeda;
+    display: inline-block;
+    line-height: 25px;
+    vertical-align: middle;
+    border-radius: 3px;
+    background-color: #04aeda;
+    cursor: pointer;
+    color: white;
+    margin-left: -7px;
+}
+
+
+/*------------------------------------------------*/
+
+.wrap {
+    width: 960px;
+    margin: 0 auto;
+    margin-top: 60px;
+}
+
+.main {
+    width: 690px;
+    float: left;
+    border-radius: 5px;
+    border: 0px solid #04aeda;
+    background-color: rgba(255, 255, 255, 0.96);
+}
+
+.main ul {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+    width: 90%;
+}
+
+.main ul li {
+    list-style: none;
+    border-top: 1px solid #04aeda;
+    padding-top: 20px;
+}
+
+.main ul li:nth-child(1) {
+    list-style: none;
+    border-top: 0px;
+}
+
+.movie_top {
+    width: 100%;
+    height: 25px;
+}
+
+.movie_top h3 {
+    float: left;
+    color: white;
+    margin: 0px;
+    line-height: 25px;
+    vertical-align: middle;
+}
+
+.movie_top span {
+    float: right;
+    color: gray;
+    line-height: 25px;
+    vertical-align: middle;
+}
+
+.movie_des {
+    clear: both;
+    width: 100%;
+    height: 245px;
+    margin-top: 15px;
+}
+
+.movie_des a:nth-child(0) {
+    float: left;
+}
+
+.movie_des p {
+    display: inline-block;
+    margin-top: 0px;
+    float: right;
+    padding-left: 10px;
+    width: 500px;
+    font-size: 90%;
+    font: "Microsoft YaHei", arial, helvetica, clean, sans-serif;
+    font-size: 90%;
+}
+
+.test {
+    vertical-align: middle;
+}
+
+.sidbar {
+    width: 260px;
+    float: right;
+}
+
+.category {
+    padding-left: 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 0px solid #04aeda;
+    background-color: rgba(255, 255, 255, 0.96);
+    padding: 10px 0 10px 20px;
+}
+
+.category li {
+    margin-top: 3px;
+}
+
+.category h4 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 3px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    width: 90%;
+}
+
+.category a {
+    display: inline-block;
+    width: 85%;
+    height: 30px;
+    line-height: 30px;
+    background-color: #ccc;
+    padding-left: 25px;
+    border-radius: 3px;
+    background-image: url("http://www.rs05.com/img/i.png");
+    background-position: 5px -187px;
+    background-repeat: no-repeat;
+}
+
+.category li.node {
+    position: relative;
+}
+
+.category li.leaf a {
+    background-image: none !important;
+}
+
+#zons_test .cate_ul {
+    margin-left: 10px;
+}
+
+#zons_test i.leaf {
+    background: #ccc none repeat scroll 0 0;
+    display: inline-block;
+    height: 20px;
+    left: 5px;
+    position: absolute;
+    top: 5px;
+    width: 20px;
+    z-index: 1111;
+    font-size: 0px;
+}
+
+.tags {
+    margin-top: 20px;
+    padding-left: 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 0px solid #04aeda;
+    background-color: rgba(255, 255, 255, 0.96);
+    padding: 10px 0 10px 20px;
+}
+
+.tags h4 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 3px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    width: 90%;
+}
+
+.tags li {
+    margin-top: 5px;
+}
+
+.tags a {
+    display: inline-block;
+    background-color: #ccc;
+    border-radius: 3px;
+    text-align: center;
+    width: 40px;
+    background-color: rgba(220, 220, 220, 0.5);
+    border-radius: 3px;
+    color: #000;
+}
