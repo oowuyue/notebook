@@ -28,9 +28,8 @@
         float: right !important;
     }
     /*
-    垂直居中 15.6
-    http://www.imooc.com/learn/9
-    
+    垂直居中 15.6 http://www.imooc.com/learn/9
+    All problems in computer science can be solved by another level of indirection
     */
     
     #container2 {
@@ -50,6 +49,17 @@
     
     .fr2 {
         float: right !important;
+    }
+    
+    .bao {
+        display: table-cell;
+        height: 150px;
+        line-height: 150px;
+        vertical-align: middle;
+    }
+    .bao h3{
+        height: 25px;
+        line-height: 25px;
     }
     </style>
 </head>
@@ -89,7 +99,12 @@
     </div>
     <br>
     <div id="container2">
-        <div class="fr2"> <span style="background:gold">123</span> </div>
+        <div class="fr2">
+            <div class="bao">
+                <h3 style="background:gold">123</h3>
+                <h3 style="background:gold">123</h3>
+            </div>
+        </div>
         <input style="width:50px" type="text" value="123" />
         <input style="width:50px" type="password" value="123" />
         <div class="fr2">
