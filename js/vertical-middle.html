@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style>
+    #container {
+        padding: 10px;
+        height: 10px;
+        border: 1px solid red;
+        height: 150px;
+        line-height: 150px;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    
+    #container div {
+        display: table-cell;
+        vertical-align: middle;
+        float: left;
+    }
+    
+    #container div * {
+        vertical-align: middle;
+    }
+    
+    .fr {
+        float: right !important;
+    }
+    /*
+    垂直居中 15.6
+    http://www.imooc.com/learn/9
+    
+    */
+    
+    #container2 {
+        padding: 10px;
+        height: 10px;
+        border: 1px solid red;
+        height: 150px;
+        line-height: 150px;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    
+    #container2 * {
+        vertical-align: middle;
+        /*float: left;*/
+    }
+    
+    .fr2 {
+        float: right !important;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="fr"> <span style="background:gold">123</span> </div>
+        <div>
+            <input style="width:50px" type="text" value="123" />
+        </div>
+        <div>
+            <input style="width:50px" type="password" value="123" />
+        </div>
+        <div>
+            <input style="width:50px" type="checkbox" value="123" />checkbox</div>
+        <div>
+            <button>button-123</button>
+        </div>
+        <div>
+            <input type="button" value="input-123" />
+        </div>
+        <div>
+            <textarea style="width:50px">123</textarea>
+        </div>
+        <div>
+            <button></button>
+        </div>
+        <div>
+            <input type="button" value="" />
+        </div>
+        <div>
+            <textarea style="width:50px"></textarea>
+        </div>
+        <div>
+            <input type="file" />
+        </div>
+    </div>
+    <br>
+    <div id="container2">
+        <div class="fr2"> <span style="background:gold">123</span> </div>
+        <input style="width:50px" type="text" value="123" />
+        <input style="width:50px" type="password" value="123" />
+        <div class="fr2">
+            <input style="width:50px" type="checkbox" value="123" />checkbox</div>
+        <button>button-123</button>
+        <input type="button" value="input-123" />
+        <textarea style="width:50px">123</textarea>
+        <button></button>
+        <input type="button" value="" />
+        <textarea style="width:50px"></textarea>
+        <input type="file" />
+    </div>
+</body>
