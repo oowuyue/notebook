@@ -1,12 +1,17 @@
-var fs = require('fs');
-var request = require("request");
-var cheerio = require("cheerio");
-var mkdirp = require('mkdirp');
+let fs = require('fs');
+let request = require("request");
+let cheerio = require("cheerio");
+let mkdirp = require('mkdirp');
 
-var dir = './images';
-var max_page = 3;
-var url =  'http://admin.hepaidai.dev:5000/adv/imgList?p=';
-var options = {
+
+mkdirp("./lectures/", function(err) {
+    if (err) console.error(err)
+    else request("http://www.cs.cmu.edu/~adamchik/15-121/lectures/").pipe(fs.createWriteStream("./lectures/" + "index.html"));
+});
+
+
+
+let options = {
     method: 'GET',
     headers: {
         'User-Agent': 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
@@ -16,12 +21,48 @@ var options = {
     }
 };
 
+let do_fetch = function(url) {
+    options.url = url;
+    request(options, function(error, response, body) {
+        if (!error && response.statusCode == 200) {
 
-mkdirp(dir, function(err) {
-    if(err){
-        console.log(err);
-    }
-});
+            let $ = cheerio.load(body);
+            $("pre a").filter(function(i, el) {
+                return $(this).text() !== 'Parent Directory';
+            }).each(function(i, elem) {
+
+                let aLink = $(this);
+                let aHref = aLink.attr("href");
+
+                if (aHref.charAt(aHref.length - 1) === "\/") {
+                    console.log("目录:" + aHref);
+                    let newDir = "./" + url.split("15-121/")[1] + aHref;
+
+                    mkdirp(newDir, function(err) {
+                        if (err) console.error(err)
+                        else {
+                            request(url + aHref).pipe(fs.createWriteStream(newDir + "index.html"));
+                            do_fetch(url + aHref);
+                        }
+                    });
+                }
+
+                if (aHref.indexOf(".") > 0) {
+                    console.log("文件:" + url + aHref);
+                    let newFile = "./" + url.split("15-121/")[1] + aHref;
+                    request(url + aHref).pipe(fs.createWriteStream(newFile));
+                    return;
+                }
+
+            });
+
+        } else {
+            console.log(error);
+        }
+    });
+};
+
+do_fetch("http://www.cs.cmu.edu/~adamchik/15-121/lectures/");
 
 
 /*-----------方式一--------------------------------
@@ -64,9 +105,9 @@ for (var page=1; page<=max_page; ++page){
         }
     });
 }
- */
+ 
 
-/*-----------方式三---------------------------------*/
+/*-----------方式三--------------------------------
 var do_fetch = function(page){
     options.url = "http://admin.hepaidai.dev:5000/adv/imgList?p=" + page;
     request(options, function(error, response, body) {
@@ -89,3 +130,4 @@ var do_fetch = function(page){
     }
 };
 do_fetch(1);
+*/
