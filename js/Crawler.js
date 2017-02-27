@@ -4,11 +4,12 @@ let cheerio = require("cheerio");
 let mkdirp = require('mkdirp');
 
 
-mkdirp("./lectures/", function(err) {
-    if (err) console.error(err)
-    else request("http://www.cs.cmu.edu/~adamchik/15-121/lectures/").pipe(fs.createWriteStream("./lectures/" + "index.html"));
-});
+let rootDir = "E:\\wamp\\www\\mylodop\\";
 
+mkdirp(rootDir + "lectures\\", function(err) {
+    if (err) console.error(err)
+    else request("http://www.cs.cmu.edu/~adamchik/15-121/lectures/").pipe(fs.createWriteStream(rootDir + "lectures\\" + "index.html"));
+});
 
 
 let options = {
@@ -35,9 +36,9 @@ let do_fetch = function(url) {
                 let aHref = aLink.attr("href");
 
                 if (aHref.charAt(aHref.length - 1) === "\/") {
-                    console.log("目录:" + aHref);
-                    let newDir = "./" + url.split("15-121/")[1] + aHref;
 
+                    let newDir = rootDir + "\\" + decodeURI(url.split("15-121/")[1] + aHref);
+                    console.log("目录:" + newDir);
                     mkdirp(newDir, function(err) {
                         if (err) console.error(err)
                         else {
@@ -48,8 +49,9 @@ let do_fetch = function(url) {
                 }
 
                 if (aHref.indexOf(".") > 0) {
-                    console.log("文件:" + url + aHref);
-                    let newFile = "./" + url.split("15-121/")[1] + aHref;
+
+                    let newFile = rootDir + "\\" + decodeURI(url.split("15-121/")[1] + aHref);
+                    console.log("文件:" + newFile);
                     request(url + aHref).pipe(fs.createWriteStream(newFile));
                     return;
                 }
