@@ -84,7 +84,7 @@ new Promise($.get('url0', function (data0) {
 
 /*-----第三种 async  await   基于协程（* yield ） -------*/
 
-const readFile = function (fileName) {
+const getUrl = function (fileName) {
   return new Promise(function (resolve, reject) {
     fs.readFile(fileName, function(error, data) {
       if (error) return reject(error);
@@ -93,26 +93,28 @@ const readFile = function (fileName) {
   });
 };
 
-function* asyncReadFile() {
-  const f1 = yield readFile('/etc/fstab');
-  const f2 = yield readFile('/etc/shells');
-  console.log(f1.toString());
-  console.log(f2.toString());
+function* asyncGet() {
+  const f1 = yield getUrl('/etc/fstab');
+  const f2 = yield getUrl('/etc/shells');
 };
 
-async function asyncReadFile() {
-  //         消费者1   生产者1
-  const f1 =  await   readFile('/etc/fstab');
-  //         消费者2   生产者2
-  const f2 =  await   readFile('/etc/shells');
+async function asyncGet() {
+  //            消费者1   生产者1
+  const data0 =  await   getUrl('url0');
+  //            消费者2   生产者2
+  const data1 =  await   getUrl('url1');
   
-  //生产者3
-  return 'hello world';
+  //生产者3 (自动包装成resolved的promise)
+  return data1;
 };
 
 //生产者3
-asyncReadFile().then(// 消费者3
+asyncGet().then(// 消费者3
   v => console.log(v),
   e => console.log(e)
 )
+
+
+/*****golang ********/
+
 
