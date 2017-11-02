@@ -6,20 +6,29 @@ $.get('url1', function () {});
 $.get('url2', function () {});
 
 
-
 /*
-         -----  数据结构
-Iterator 
-         -----  协程算法状态机（生产者）
 
+                                       promise                     promise
+callback  ---->  promise ----->                        -------->
+                                   *Generator  Yield               async  await
+                                 
+                                 
+                                      -----协程算法状态机
+                             Iterator 
+                                      -----数据结构
+
+
+消费者1 依赖 生产者1
+              ↓
+            消费者2  依赖 生产者2 
+            
 生产者可能是 耗时算法（CPU） 或 耗时数据（IO）
 
 
 子程序(函数)就是协程的一种特例
 协程多个状态，   可中断 保存现场 恢复现场 继续。 多个协程是相互独立 平等的
-子程序(函数) 只有一种状态即输出。  函数调用属于被调用函数是属于调用函数的一部分
-
-
+子程序(函数) 只有一种状态即输出。  函数调用属于被调用函数是属于调用函数的一部分                                     
+                                                            
 */
 
 /*-----第一种callback-------*/
@@ -38,11 +47,11 @@ $.get('url0', function (data0) {
 });
 
 
-/*-----第一种Promise-------
+/*-----第二种Promise-------
 
-              --reject()-->  rejcted 生产失败  value
+              --reject()--> rejcted 生产失败  value
 pending 生产中
-              --resolve()->  resolved 生产成功 reason
+              --resolve()-> resolved 生产成功 reason
 生产者1
 */
 new Promise($.get('url0', function (data0) {
