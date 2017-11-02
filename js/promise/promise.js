@@ -118,3 +118,50 @@ asyncGet().then(// 消费者3
 /*****golang ********/
 
 
+// concurrent.go
+package main
+
+import (
+     "fmt"
+     "net/http"
+     "io/ioutil"
+)
+
+
+func main() {
+  ch0 := make(chan string)
+  ch1 := make(chan string)
+  go MakeRequest("http://api.juheapi.com/japi/toh", ch0 , nil)
+  go MakeRequest("http://api.juheapi.com/", ch1 , ch0)
+  fmt.Println(<-ch1)
+}
+
+func MakeRequest(url string, wch chan string, rch chan string) {
+    
+    if (rch != nil && wch != nil) {
+        <- rch
+        resp, err := http.Get(url)
+        if err != nil {
+            panic(err)
+        }
+        defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        text := string(body)
+        fmt.Println(text)
+        wch <- text
+        return
+    }
+
+    if wch != nil {
+        resp, err := http.Get(url)
+        if err != nil {
+            panic(err)
+        }
+        defer resp.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        text := string(body)
+        fmt.Println(text)
+        wch <- text
+        return
+    }
+}
