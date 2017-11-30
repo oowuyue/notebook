@@ -1,4 +1,4 @@
-function Foo1() {
+function Foo1() { // new struct()
     this.secret = 'default';   // struct {} 模板
 }
 Foo1.prototype.set_secret = function(secret) {
@@ -8,6 +8,11 @@ Foo1.prototype.get_secret = function() {
     return this.secret;
 };
 var foo1 = new Foo1();   // new struct()  实例 golang
+
+/*
+if(a<b)   控制指令
+   var  a =  a-b    数据指令   运算指令
+*/
 
 console.log(foo1.get_secret());
 console.log(foo1.secret); //ok
