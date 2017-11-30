@@ -1,5 +1,5 @@
 function Foo1() {
-    this.secret = 'default';
+    this.secret = 'default';   // struct {} 模板
 }
 Foo1.prototype.set_secret = function(secret) {
     this.secret = secret;
@@ -7,7 +7,7 @@ Foo1.prototype.set_secret = function(secret) {
 Foo1.prototype.get_secret = function() {
     return this.secret;
 };
-var foo1 = new Foo1();
+var foo1 = new Foo1();   // new struct()  实例 golang
 
 console.log(foo1.get_secret());
 console.log(foo1.secret); //ok
