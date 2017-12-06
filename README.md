@@ -8,3 +8,6 @@ b commit
 a stageing
 
 a worktree
+
+
+delelpt
