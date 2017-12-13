@@ -49,3 +49,29 @@ function s2(n) {
 
 console.log(s1(15));
 console.log(s2(15));
+
+
+
+
+function fib(n) {
+    var tmp;
+    var prev;
+    var current;
+
+    for (let index = 0; index <= n; index++) {
+        if (index == 0 || index == 1) {
+            current = index;
+            prev = 0;
+        } else {
+            tmp = current;
+            current = current + prev;
+            prev = tmp;
+        }
+    }
+    return current;
+}
+
+function fib2(n) {
+    if (n == 1 || n == 0) return n;
+    else return fib2(n - 1) + fib2(n - 2);
+}
