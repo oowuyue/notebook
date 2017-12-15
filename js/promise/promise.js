@@ -61,7 +61,7 @@ js 《--------》 nodej核心 c 《--------》  os 《--------》 硬件（只�
 
 https://www.zhihu.com/question/30432536
 
-   异常sync
+   异常软中断sync
        --错误                         cpu
        --终止                             ↖ interrupt async
 app    --trap syscall-->   kernal                           ↖io硬件
