@@ -19,9 +19,9 @@ var subsets = function(nums) {
 
 /*
 循环方式
-res = [ [] ]
-   ↑                ↑                         ↑
-subsets([0])    subsets([0..1]) --...-->  subsets([0..n])
+res = [ [] ] --->          --->                ------->            
+                    ↑                ↑                         ↑
+                subsets([0])    subsets([0..1]) --...-->  subsets([0..n])
 */
 var subsets1 = function(nums) {
     return findSubsets([[]]);
