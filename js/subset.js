@@ -73,4 +73,9 @@ var subsets = function (nums) {
 
 
 
+/***
+http://huaren-it.com/thread/leetcode%E7%AC%AC46%E9%A2%98-permutations/
+https://discuss.leetcode.com/topic/31838/three-ways-to-do-this-c
+https://discuss.leetcode.com/topic/46162/a-general-approach-to-backtracking-questions-in-java-subsets-permutations-combination-sum-palindrome-partioning
 
+****/
