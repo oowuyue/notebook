@@ -54,12 +54,11 @@ function subsets(set) {
            return;
        }
        getSub(tmp,index+1);
-
-       tmp.push(set[index]);
-       getSub(tmp,index+1);
-       tmp.pop();
+       getSub(tmp.concat([set[index]]),index+1);
+       //tmp.push(set[index]);
+       //getSub(tmp,index+1);
+       //tmp.pop();
   };
-
   getSub([],0);
   return res;
 }
