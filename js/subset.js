@@ -43,6 +43,31 @@ console.log(subsets1([2, 3, 4]));
   https://www.cnblogs.com/grandyang/p/4309345.html
   Back tracking ：https://discuss.leetcode.com/topic/31838/three-ways-to-do-this-c
 */
+
+var  set = ['a','b','c'];
+
+function subsets(set) {
+  let res = [];
+  let getSub = (tmp, index) => { 
+      if(index == set.length){
+           res.push(tmp.concat([]));
+           return;
+       }
+       getSub(tmp,index+1);
+
+       tmp.push(set[index]);
+       getSub(tmp,index+1);
+       tmp.pop();
+  };
+
+  getSub([],0);
+  return res;
+}
+
+console.log( subsets(set) );
+
+
+
 var subsets = function (nums) {
   var  set = nums;
   var  subset = []; 
@@ -74,8 +99,5 @@ var subsets = function (nums) {
 
 
 /***
-http://huaren-it.com/thread/leetcode%E7%AC%AC46%E9%A2%98-permutations/
-https://discuss.leetcode.com/topic/31838/three-ways-to-do-this-c
-https://discuss.leetcode.com/topic/46162/a-general-approach-to-backtracking-questions-in-java-subsets-permutations-combination-sum-palindrome-partioning
 
 ****/
