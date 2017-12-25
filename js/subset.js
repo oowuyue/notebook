@@ -98,5 +98,6 @@ var subsets = function (nums) {
 
 
 /***
-
+https://discuss.leetcode.com/topic/13568/simple-java-solution
+http://blog.csdn.net/u012501459/article/details/46741267
 ****/
