@@ -76,10 +76,14 @@ https://www.zhihu.com/question/30432536
        --终止                             ↖ interrupt async
 app    --trap syscall-->   kernal                           ↖io硬件
 
+类     对象
 
-
-
-                                                            
+上帝     人     计算机
+          
+         类     对象 
+         
+人就像计算机的上帝 计算机只能看到对象 是否自省类？
+ 
 */
 
 /*-----第一种callback-------*/
