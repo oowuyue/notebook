@@ -83,6 +83,11 @@ app    --trap syscall-->   kernal                           ↖io硬件
          类     对象 
          
 人就像计算机的上帝 计算机只能看到对象 是否自省类？
+
+       cdata                    odata
+class                    obj1            obj1.ofun()=== cfunc(obj1_this_*)
+       cfunc                  <-ofunc
+
  
 */
 
