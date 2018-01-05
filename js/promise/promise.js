@@ -62,13 +62,6 @@ callback  ---->  promise ----->                        -------->
 js 《--------》 nodej核心 c 《--------》  os 《--------》 硬件（只能是同步阻塞）
 
 
-
-
-
-分治
-dp 选择 决策 最优子结构性质是指问题的最优解包含其子问题的最优解时  一个最优化策略的子策略总是最优的
-贪心
-
 https://www.zhihu.com/question/30432536
 
    异常软中断sync
@@ -77,28 +70,10 @@ https://www.zhihu.com/question/30432536
 app    --trap syscall-->   kernal                           ↖io硬件事件
 
 
+分治
+dp 选择 决策 最优子结构性质是指问题的最优解包含其子问题的最优解时  一个最优化策略的子策略总是最优的
+贪心
 
-
-类     对象
-
-上帝     人     计算机
-          
-         类     对象 
-         
-人就像计算机的上帝 计算机只能看到对象 是否自省类？
-
-类型  对象
-      类型  对象
-            类型  对象
-      
-       cdata                    odata
-class                    obj1            obj1.ofun()=== cfunc(obj1_this_*)
-       cfunc                  <-ofunc
-
-
-
- 
- 
  
 http://www.cnblogs.com/lovesong/p/5572121.html 
                                                  （单个时间线内 进程内，线程内）                           （多个时间线 进程，线程间）                                             
@@ -122,7 +97,23 @@ http://www.cnblogs.com/lovesong/p/5572121.html
                                                                                                                     事件消息队列
 
 
+类     对象
 
+上帝     人     计算机
+          
+         类     对象 
+         
+人就像计算机的上帝 计算机只能看到对象 是否自省类？
+
+类型  对象
+      类型  对象
+            类型  对象
+      
+       cdata                    odata
+class                    obj1            obj1.ofun()=== cfunc(obj1_this_*)
+       cfunc                  <-ofunc
+       
+https://www.zhihu.com/question/27699413  https://www.zhihu.com/question/30301819  https://www.zhihu.com/question/54881706
 
 
      集合              元素            运算  ==> 结构 代数结构  序结构 拓扑结构
@@ -147,7 +138,7 @@ go  struct+             new            自定义方法 以数据为中心
 C++ class               new
 
 
---------------------------------------------------------------------------------https://www.zhihu.com/question/27699413
+--------------------------------------------------------------------------------
                         
 java
 Js                     一切皆对象（不考虑java js里的原始类型）
