@@ -76,6 +76,9 @@ https://www.zhihu.com/question/30432536
        --终止                             ↖ interrupt async
 app    --trap syscall-->   kernal                           ↖io硬件事件
 
+
+
+
 类     对象
 
 上帝     人     计算机
@@ -84,37 +87,82 @@ app    --trap syscall-->   kernal                           ↖io硬件事件
          
 人就像计算机的上帝 计算机只能看到对象 是否自省类？
 
+类型  对象
+      类型  对象
+            类型  对象
+      
        cdata                    odata
 class                    obj1            obj1.ofun()=== cfunc(obj1_this_*)
        cfunc                  <-ofunc
 
+
+
+ 
  
  
 http://www.cnblogs.com/lovesong/p/5572121.html 
-
+                                                 （单个时间线内 进程内，线程内）                           （多个时间线 进程，线程间）                                             
 创建型 ○→○
+                                                     工厂  ioc                                                  fork thread
 
-    工厂  ioc
+结构型 对象组合  ◎虚包含
 
-结构型 对象组合  ◎
+                                                    组合对象
+                                                                                                           进程-->多线程
+                                                    统一接口   adapter                                      线程-->多协程  
 
-    组合对象   将类组合在一起去构成更大的l类结构 
+                                                    增加功能   aop                                          保存快照数据多少分的
 
-    统一接口   adapter
-
-    增加功能   aop
-   
-    控制流程   continuation
+                                                    控制流程   continuation
     
-行为型 对象之间的通信  ◎
-   
-    实体（对象，线程，组件）间通信  （消息队列 共享内存）
-        如:分配任务mvc action  浏览器线程 nginx线程 间的网络通信
-           事件消息队列
-    Observer 
-    pubsub 
-    生成消费
+行为型 生成消费 对象之间的通信  ◎虚包含
+                                                  （单个时间线内 进程内，线程内）对象间通信                    （时间线 进程，线程）间通信  
+                                                    Observer                                                （消息队列 共享内存）
+                                                    pubsub                                                       如:分配任务mvc action  浏览器线程 nginx线程 间的网络通信
+                                                                                                                    事件消息队列
+
+
+
+
+
+     集合              元素            运算  ==> 结构 代数结构  序结构 拓扑结构
+     类型              对象实例        方法
+     CPU数据指令                       CPU运算 控制指令
+        内存空间         
+        
+    --------------------原始类型 存数据--------------------------------------
+
+     int               1,2             + - * /
+c    float             1.2,0.1
+     char              a,b             
+
+     arr                               for 遍历 排序 搜索
+     struct                            
+
+     -------------------引用类型 存指针-------------------------------------
+
+go  struct+             new            自定义方法 以数据为中心
+    func(*strcut)                      data with func
+
+C++ class               new
+
+
+--------------------------------------------------------------------------------https://www.zhihu.com/question/27699413
+                        
+java
+Js                     一切皆对象（不考虑java js里的原始类型）
+Python 
+      ↑
+      ↑这里的类是底层c++类的实例对象
+      ↑
+    class              object1 
+
+ 
+    class              object1
     
+
+    
+
 
 
 
