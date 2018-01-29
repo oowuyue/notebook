@@ -101,3 +101,23 @@ var subsets = function (nums) {
 https://discuss.leetcode.com/topic/13568/simple-java-solution
 http://blog.csdn.net/u012501459/article/details/46741267
 ****/
+
+
+/****************************************************************************************/
+/*
+  解法三：dfs
+  https://segmentfault.com/a/1190000008433337
+*/
+
+var set = ['a', 'b', 'c'];
+var setLen = set.length;
+var result = [];
+
+function subsets(index, tmpArr) {
+   result.push(tmpArr);
+   for (let i = index + 1; i < setLen; i++) {
+       subsets(i, tmpArr.concat(set[i]));
+   }
+}
+subsets(-1, []);
+console.log(result);
