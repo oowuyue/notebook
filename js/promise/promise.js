@@ -251,6 +251,7 @@ new Promise($.get('url0', function (data0) {
 
 
 /*-----第三种 async  await   基于协程（* yield ） -------*/
+//https://cnodejs.org/topic/5640b80d3a6aa72c5e0030b6
 
 const getUrl = function (fileName) {
   return new Promise(function (resolve, reject) {
@@ -285,17 +286,14 @@ asyncGet().then(// 消费者3
 
 
 /*****golang ********/
+// concurrent.go  https://zhuanlan.zhihu.com/p/32521576
 
-
-// concurrent.go
 package main
-
 import (
      "fmt"
      "net/http"
      "io/ioutil"
 )
-
 
 func main() {
   ch0 := make(chan string)
