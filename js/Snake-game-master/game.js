@@ -7,23 +7,39 @@ function Game() {
     this.food;
 
     this.gameloop;
+    this.score = 0;
+    this.level = 0;
+    this.fps = 500;
     this.btn;
+    this.scoreLabel;
 
     this.regEvent();
 }
 
 
 Game.prototype.start = function () {
-
-    this.food = new Food(0, 0, this).random();
+    this.food = new Food(this).random();
     this.snake = new Snake(this);
+    this.scoreLabel = document.getElementById('score');
     this.btn.setAttribute('disabled', true);
     var self = this;
-    this.gameloop = setInterval(() => self.snake.run(), 100);
+    this.gameloop = setInterval(() => self.snake.run(), self.fps);
+}
+
+Game.prototype.snakeEat = function (eatFood) {
+    this.score = this.score + eatFood.foodScore;
+    var calulevel = parseInt(this.score / 10);
+    if (calulevel != this.level) {
+        this.level = calulevel;
+        this.fps = this.fps - 50;
+        this.gameloop = clearInterval(this.gameloop);
+        var self = this;
+        this.gameloop = setInterval(() => self.snake.run(), self.fps);
+    }
 }
 
 Game.prototype.createFood = function () {
-    this.food = new Food(0, 0, this).random();
+    this.food = new Food(this).random();
 }
 
 Game.prototype.end = function () {
@@ -71,13 +87,13 @@ Game.prototype.regEvent = function () {
                     console.log('down');
                 }
                 break;
-            default:{
-                
-            }
+            default:
+                {
+
+                }
         }
     }.bind(this);
 };
-
 
 Game.prototype.draw = function () {
 
@@ -104,4 +120,7 @@ Game.prototype.draw = function () {
     var snakeSize = this.snake.snakeSize;
     this.ctx.fillStyle = 'red';
     this.ctx.fillRect(x * snakeSize, y * snakeSize, snakeSize, snakeSize);
+
+    //draw score 
+    this.scoreLabel.innerHTML = "Level: " + this.level + " / Score: " + this.score;
 }

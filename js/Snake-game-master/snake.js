@@ -1,9 +1,8 @@
 function Snake(game) {
     this.game = game;
 
-    this.score = 0;
     this.snakeBody = [];
-    this.snakeSize = 10;
+    this.snakeSize = 10; //draw 时用 高度尺寸
     this.direction = "down";
 
     this.initSnake();
@@ -12,7 +11,7 @@ function Snake(game) {
 Snake.prototype.initSnake = function () {
     var length = 4;
     for (var i = length - 1; i >= 0; i--) {
-        this.snakeBody.push(new Food(i, 0, this.game));
+        this.snakeBody.push(new Food(this.game).setxy(i, 0));
     }
     /***
      *   2      1       0
@@ -45,8 +44,8 @@ Snake.prototype.run = function () {
 
     var curFood = this.game.food;
     if (snakeX == curFood.x && snakeY == curFood.y) {
-        var tail = new Food(snakeX, snakeY, this)
-        this.score++;
+        var tail = new Food(this.game).setxy(snakeX, snakeY);
+        this.game.snakeEat(tail);
         this.game.createFood();
     } else {
         var tail = this.snakeBody.pop();
@@ -56,8 +55,6 @@ Snake.prototype.run = function () {
     this.snakeBody.unshift(tail);
 
     this.game.draw();
-
-
 };
 
 Snake.prototype.checkCollision = function (snakeX, snakeY) {
