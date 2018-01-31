@@ -8,7 +8,7 @@ $.get('url2', function () {});
 
 /*
 
-                                       promise                     promise
+                                       promise                       promise
 callback  ---->  promise ----->                        -------->
                                    *Generator  Yield               async  await
                                  
@@ -267,8 +267,9 @@ function* asyncGet() {
 };
 
 async function asyncGet() {
-  //            消费者1   生产者1
-  const data0 =  await   getUrl('url0');
+  ////生产者getUrl生成代码线-->消费者await退出物理栈保存快照[协程]-->生产者异步代码线完成通知消费者恢复 [await getUrl()]整体替换 
+  //            消费者1   生产者1 
+  const data0 =  await   getUrl('url0'); 
   //            消费者2   生产者2
   const data1 =  await   getUrl('url1');
   
