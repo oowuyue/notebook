@@ -8,6 +8,11 @@ $.get('url2', function () {});
 
 /*
 
+物理    抽象    访问
+内存    线
+硬盘    树      线
+网络    图
+
                                        promise                       promise
 callback  ---->  promise ----->                        -------->
                                    *Generator  Yield               async  await
