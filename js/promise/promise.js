@@ -97,7 +97,7 @@ http://www.cnblogs.com/lovesong/p/5572121.html    （单个时间线内 进程�
                                                   （单个时间线内 进程内，线程内）对象间通信                   （时间线 进程，线程）间通信  
                                                     Observer                                               （消息队列 共享内存）
                                                     pubsub                                                       如:分配任务mvc action  浏览器线程 nginx线程 间的网络通信
-                                                                                                                    事件消息队列
+                                                    vue组件通信                                                事件消息队列
 
 
 类     对象
@@ -124,19 +124,19 @@ https://www.zhihu.com/question/27699413  https://www.zhihu.com/question/30301819
      CPU数据指令                       CPU运算 控制指令
         内存空间         
         
-    --------------------原始类型 存数据--------------------------------------
+     --------------------原始类型 存数据--------------------------------------
 
      int               1,2             + - * /
 c    float             1.2,0.1
      char              a,b             
 
-     arr                               for 遍历 排序 搜索
+     arr                               for 遍历 排序 搜索                  .h
      struct                            
 
-     -------------------引用类型 存指针-------------------------------------
-
-go  struct+             new            自定义方法 以数据为中心
-    func(*strcut)                      data with func
+数据视角 -------------------引用类型 存指针------------------------------------ interface 以算法视角为中心
+                                                                                 
+go  struct+             new            自定义方法 
+    func(*strcut)                      data with func                                                         
 
 C++ class               new
 
