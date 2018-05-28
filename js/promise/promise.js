@@ -214,7 +214,7 @@ C  价差交割                     单向交割
  
 */
 
-/*-----第一种callback-------*/
+/*-----------------------------第一种callback-------------------------------------------*/
 
 //生产者1        消费者1
 $.get('url0', function (data0) {
@@ -230,7 +230,7 @@ $.get('url0', function (data0) {
 });
 
 
-/*-----第二种Promise-------
+/*--------------------------------第二种Promise--------------------------------------------*/
 
               --reject()--> rejcted 生产失败  value
 pending 生产中
@@ -258,7 +258,7 @@ new Promise($.get('url0', function (data0) {
 });
 
 
-/*-----第三种 async  await   基于协程（* yield ） -------*/
+/*-----------------------------第三种 async  await   基于协程（* yield ） ---------------------*/
 //https://cnodejs.org/topic/5640b80d3a6aa72c5e0030b6
 
 const getUrl = function (fileName) {
@@ -275,6 +275,8 @@ function* asyncGet() {
   const f2 = yield getUrl('/etc/shells');
 };
 
+--------------------------------------
+  
 async function asyncGet() {
   ////生产者getUrl生成代码线-->消费者await退出物理栈保存快照[协程]-->生产者异步代码线完成通知消费者恢复 [await getUrl()]整体替换 
   //            消费者1   生产者1 
