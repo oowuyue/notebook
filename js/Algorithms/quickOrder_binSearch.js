@@ -1,5 +1,7 @@
 //https://en.wikipedia.org/wiki/Quicksort
 //https://octman.com/blog/2014-06-08-loop-invarient/
+//https://en.wikipedia.org/wiki/Binary_search_algorithm
+//https://octman.com/blog/2013-09-27-binary-search-and-variants/
 
 
 function swap(arr, i, p) {
