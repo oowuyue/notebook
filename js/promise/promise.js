@@ -232,9 +232,9 @@ $.get('url0', function (data0) {
 
 /*--------------------------------第二种Promise--------------------------------------------*/
 
-              --reject()--> rejcted 生产失败  value
+                --reject()--> rejcted  生产失败  value
 pending 生产中
-              --resolve()-> resolved 生产成功 reason
+                --resolve()-> resolved 生产成功  reason
 生产者1
 */
 new Promise($.get('url0', function (data0) {
@@ -275,8 +275,6 @@ function* asyncGet() {
   const f2 = yield getUrl('/etc/shells');
 };
 
---------------------------------------
-  
 async function asyncGet() {
   ////生产者getUrl生成代码线-->消费者await退出物理栈保存快照[协程]-->生产者异步代码线完成通知消费者恢复 [await getUrl()]整体替换 
   //            消费者1   生产者1 
@@ -294,8 +292,25 @@ asyncGet().then(// 消费者3
   e => console.log(e)
 )
 
+async 函数返回的是一个 Promise 对象(生产指针)
+    当前线程直接解决   
+        return "hello async"  -> return Promise.resolve("hello async")
+        return Promise.resolve("hello async")
+    异步线程解决
+         return new Promise(resolve => {setTimeout(() => resolve("long_time_value"), 1000);});
 
-/*****golang ********/
+await 是个运算符 等待的是一个表达式值（文本替换）只能在async函数内部使用 (等待生产结束->成功或失败)
+    The await operator is used to wait for a Promise
+    The await expression causes async function execution to pause until a Promise is resolved, 
+    that is fulfilled or rejected, and to resume execution of the async function after fulfillment. 
+    When resumed, the value of the await expression is that of the fulfilled Promise.
+    If the Promise is rejected, the await expression throws the rejected value. throw new Error('Whoops!').
+    If the value of the expression following the await operator is not a Promise, it's converted to a resolved Promise.
+
+
+
+
+/***************golang ******************************************************************************************************************/
 // concurrent.go  https://zhuanlan.zhihu.com/p/32521576
 
 package main
