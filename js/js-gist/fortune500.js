@@ -33,9 +33,9 @@ async function parseYearPage(year, yearLink) {
         let dataArr = [];
         $("#leftdiv a").filter((i, t) => {//12 13
             let name = $(t).text();
-            return name.includes("净资产收益率") || name.includes("利润率")
+            return name.includes("净资产收益率") || name.includes("利润率") || name.includes("亏损公司")
         }).each((i, t) => {
-            let name = $(t).text().includes("净资产收益率") ? "净资产收益率" : "利润率";
+            let name = $(t).text().includes("净资产收益率") ? "净资产收益率" : $(t).text().includes("利润率") ? "利润率" : "亏损";
             let yearLink = $(t).attr('href');
             dataArr.push([year, name, yearLink]);
         })
@@ -52,7 +52,7 @@ async function parseData(year, rate, rateLink) {
         let $ = cheerio.load(response.data);
 
         let hyear = year.slice(0, 4);
-        let hrate = rate.includes("净资产收益率") ? "roe" : "prof";
+        let hrate = rate.includes("净资产收益率") ? "roe" : rate.includes("利润率") ? "prof" : "loss";
         let dataArr = [];
 
         $("table").filter((i, t) => {
@@ -78,7 +78,7 @@ async function parseData(year, rate, rateLink) {
             stmt.finalize();
 
             db.each("SELECT * FROM " + table, function (err, row) {
-                console.log(row.name + ": " + row[hrate]);
+                //console.log(row.name + ": " + row[hrate]);
             });
         });
         return true;
@@ -87,6 +87,51 @@ async function parseData(year, rate, rateLink) {
         throw error;
     }
 }
+
+async function crawlToDb() {
+    try {
+        let yearLinks = await parseYearList();
+        console.log(yearLinks);
+        let yearRateLinks = await Promise.all(yearLinks.map(item => {
+            return parseYearPage(item[0], item[1])
+        }));
+        console.log(yearRateLinks);
+
+        let yearRoeLinks = yearRateLinks.map(items => {
+            for (const key in items) {
+                if (items[key][1] == "净资产收益率")
+                    return items[key]
+            }
+        });
+        console.log(yearRoeLinks);
+        let yearProfLinks = yearRateLinks.map(items => {
+            for (const key in items) {
+                if (items[key][1] == "利润率")
+                    return items[key]
+            }
+        });
+        let yearLossLinks = yearRateLinks.map(items => {
+            for (const key in items) {
+                if (items[key][1] == "亏损")
+                    return items[key]
+            }
+        });
+
+        yearRateLinks = yearRoeLinks.concat(yearProfLinks).concat(yearLossLinks);
+        console.log(yearRateLinks); 
+
+        let result = await Promise.all(yearRateLinks.map(item => {
+            return parseData(item[0], item[1], item[2])
+        }));
+
+        return result;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 
 
 async function unite(rate, year1, year2) {
@@ -181,7 +226,7 @@ async function unite2(rate, preData, nextYear) {
     }
 }
 
-async function start(rate, end, start) {
+async function uniteRate(rate, end, start) {
     try {
         let arr = [];
         for (let index = end - 1; index >= start; index--) {
@@ -197,18 +242,29 @@ async function start(rate, end, start) {
     }
 }
 
-async function main() {
+async function analyze() {
     try {
-        let roe = await start("roe", 2020, 2010);
-        let prof = await start("prof", 2020, 2010);
-
-        let tt = 1;
+        let roe = await uniteRate("roe", 2020, 2010);
+        let prof = await uniteRate("prof", 2020, 2010);
+        return [roe, prof]
     } catch (error) {
         console.error(error);
         throw error;
     }
 }
 
+
+
+async function main() {
+    try {
+        let result = await crawlToDb(); return;
+        let data = await analyze();
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 main();
 
 
@@ -243,5 +299,5 @@ async function test() {
  *回调地狱          单层回调链
  *
  *
- * 
+ *
  */
