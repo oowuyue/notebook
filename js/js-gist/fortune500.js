@@ -1,7 +1,7 @@
 const axios = require('axios');
 const cheerio = require("cheerio");
-const { isNull, isArray, isUndefined } = require('lodash');
-const { stream } = require('assert-plus');
+const { cloneDeep, isArray, isUndefined } = require('lodash');
+const { List } = require('immutable');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('500.db');
 let domain = "http://www.fortunechina.com/fortune500/";
@@ -91,11 +91,9 @@ async function parseData(year, rate, rateLink) {
 async function crawlToDb() {
     try {
         let yearLinks = await parseYearList();
-        console.log(yearLinks);
         let yearRateLinks = await Promise.all(yearLinks.map(item => {
             return parseYearPage(item[0], item[1])
         }));
-        console.log(yearRateLinks);
 
         let yearRoeLinks = yearRateLinks.map(items => {
             for (const key in items) {
@@ -103,7 +101,6 @@ async function crawlToDb() {
                     return items[key]
             }
         });
-        console.log(yearRoeLinks);
         let yearProfLinks = yearRateLinks.map(items => {
             for (const key in items) {
                 if (items[key][1] == "利润率")
@@ -116,22 +113,18 @@ async function crawlToDb() {
                     return items[key]
             }
         });
-
         yearRateLinks = yearRoeLinks.concat(yearProfLinks).concat(yearLossLinks);
-        console.log(yearRateLinks); 
-
         let result = await Promise.all(yearRateLinks.map(item => {
             return parseData(item[0], item[1], item[2])
         }));
 
-        return result;
+        return result.reduce((i1, i2) => { return i1 && i2 })
 
     } catch (error) {
         console.error(error);
         throw error;
     }
 }
-
 
 
 async function unite(rate, year1, year2) {
@@ -175,7 +168,6 @@ async function unite(rate, year1, year2) {
             if (isUndefined(itme2['count'])) itme2['count'] = 1
             if (!isArray(itme2[rate])) itme2[rate] = [year2 + "::" + itme2[rate]];
         })
-        //console.log(t1.concat(t2));
         return t1.concat(t2);
     } catch (error) {
         console.error(error);
@@ -192,7 +184,8 @@ async function unite2(rate, preData, nextYear) {
         //let t1 =  Object.assign({}, preData);
         //let t1 = preData;
         //let t1 = [...preData];
-        let t1 = JSON.parse(JSON.stringify(preData));//deepClone
+        //let t1 = cloneDeep(preData);
+        let t1 = JSON.parse(JSON.stringify(preData));
         let t2 = await new Promise(function (resolve, reject) {
             db.all(sql, [], (err, rows) => {
                 if (err) return reject(err);
@@ -217,7 +210,6 @@ async function unite2(rate, preData, nextYear) {
             if (isUndefined(itme2['count'])) itme2['count'] = 1
             if (!isArray(itme2[rate])) itme2[rate] = [nextYear + "::" + itme2[rate]];
         })
-        //console.log(t1.concat(t2));
         return t1.concat(t2);
 
     } catch (error) {
@@ -246,7 +238,8 @@ async function analyze() {
     try {
         let roe = await uniteRate("roe", 2020, 2010);
         let prof = await uniteRate("prof", 2020, 2010);
-        return [roe, prof]
+        let loss = await uniteRate("loss", 2020, 2010);
+        return [roe, prof, loss]
     } catch (error) {
         console.error(error);
         throw error;
@@ -254,10 +247,9 @@ async function analyze() {
 }
 
 
-
 async function main() {
     try {
-        let result = await crawlToDb(); return;
+        let result = await crawlToDb();
         let data = await analyze();
         return data;
     } catch (error) {
@@ -288,15 +280,22 @@ async function test() {
 /*******
  *
  * 2020  2019   2018   2017  2016  2015
- *
  * !!!!!!!!!!! https://www.cnblogs.com/CyLee/p/9320569.html
  * node --inspect-brk get2.js    chrome://inspect/#devices
  *
- * 回调             promise                  [promise] async function{ await [promise] }
+ *
+ *
+ *回调              promise                  [promise] async function{ await [promise] }
  *                    pending
  *                    resolove:value
  *                    rejtct:value
  *回调地狱          单层回调链
+ *
+ *
+ *
+ * for foreach      Iterator      [Generator迭代器] function* makeIteratorGenerator
+ *                    next                                             yield
+ *
  *
  *
  *
