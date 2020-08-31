@@ -1,0 +1,701 @@
+
+https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html
+
+
+MVVC[Undo-log]
+
+
+                 is
+        表级锁定         那意向锁是要解决一个什么问题呢？表锁与行锁共存的问题
+                 ix
+
+                        
+                 S      read 
+锁      行记录锁         Record Locks the row-level locks are actually index-record locks 
+                 X      read or update or delete  
+
+          (+)     
+        gap Lock        insert  only purpose is to prevent other transactions from inserting to the gap
+
+          (||)
+        Next-Key 
+
+
+--------------------------------------------------------------------------------------------------------------------
+https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html
+
+
+Dirty read              读最新的数据,不管这条记录是不是已提交
+    select
+
+    An operation that retrieves unreliable data, data that was updated by another transaction but not yet committed. 
+    It is only possible with the isolation level known as read uncommitted.
+    Its opposite is consistent read,
+
+Consistent Read         读MVVC[Undo-log]
+    select
+
+    A read operation that uses snapshot information to present query results based on a point in time, regardless of changes performed by other transactions running at the same time. 
+    If queried data has been changed by another transaction, the original data is reconstructed based on the contents of the undo log. 
+    This technique avoids some of the locking issues that can reduce concurrency by forcing transactions to wait for other transactions to finish.
+    With READ COMMITTED isolation level, the snapshot is reset to the time of each consistent read operation.
+    With REPEATABLE READ isolation level, the snapshot is based on the time when the first read operation is performed. 
+    Consistent read is the default mode in which InnoDB processes SELECT statements in READ COMMITTED and REPEATABLE READ isolation levels. 
+    Because a consistent read does not set any locks on the tables it accesses, 
+    other sessions are free to modify those tables while a consistent read is being performed on the table.
+
+
+读+锁 和 写              加锁 AB场景
+                          
+
+--------------------------------------------------------------------------------------------------------------------
+In the InnoDB transaction model, the goal is to combine the best properties of a multi-versioning database with traditional two-phase locking
+
+READ UNCOMMITTED
+
+    读 Dirty-read  
+    
+    读+锁 和 写  =>A
+ 
+READ COMMITTED
+    
+    读 Consistent-Reads the snapshot is reset to the time of each consistent read operation
+    
+    读+锁 和 写  =>A
+    
+         
+REPEATABLE READ
+
+    读 Consistent-Reads the snapshot is based on the time when the first read operation is performed
+    
+    读+锁 和 写  =>B
+
+SERIALIZABLE 
+    
+    读
+    ↓
+    读+锁 和 写  =>B
+
+
+
+
+ACID四个特性
+https://www.zhihu.com/question/31346392/answer/362597203
+https://www.zhihu.com/question/30272728/answer/72476703
+
+一致性  而事务具备ACID里C的特性是说通过事务的AID来保证我们的一致性.
+        一个事务事务开始前和结束后 不管成功还是失败 从一个正确的状态,迁移到另一个正确的状态
+        多个事务间并发 单个事务开始和结束之间的中间状态不会被其他事务看到
+
+原子性  一个事务内的所有SQL操作是一个整体 要么全成功 要么全失败 redo-log  Undo-log
+持久性  一个事务提交后，对系统的影响是永久的 redo-log    
+
+隔离性  多个事务间并发 不同隔离级别 适当的破坏一致性来提升性能与并行度   锁   MVVC[Undo-log]
+        Read Uncommitted  =》 Read Committed =》 Repeated Read =》 Serialization 
+       
+
+C  : 一致性是最基本的属性，其它的三个属性都为了保证一致性而存在的
+
+AD : WAL（Write Ahead Log） redo-log物理恢复 Undo-log逻辑事务   Insert undo logs are needed only in transaction rollback   
+                                                              Update undo logs are used also in consistent reads
+I  : 锁   MVVC[Undo-log]
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html
+
+
+Leaf query clauses 
+  Leaf query clauses look for a particular value in a particular field, 
+  such as the match, term or range queries. These queries can be used by themselves
+
+    Full text queries      (先analyzers分词https://www.elastic.co/guide/en/elasticsearch/reference/current/full-text-queries.html)
+        match
+        match_phrase
+            https://stackoverflow.com/questions/23150670/elasticsearch-match-vs-term-query
+            https://www.cnblogs.com/yjf512/p/4897294.html 
+
+    Term level queries      https://www.elastic.co/guide/en/elasticsearch/reference/current/term-level-queries.html
+        term  => = 
+        range => between_and  
+        exists missing => isnull 
+        ids 
+                  
+Compound query clauses
+  Compound query clauses wrap other leaf or compound queries and are used 
+  to combine multiple queries in a logical fashion (such as the bool or dis_max query)
+  or to alter their behaviour switch from query to filter context.(such as the constant_score query)
+
+        bool query
+        （The default query for combining multiple leaf or compound query clauses）
+            
+            must => and 
+            should  => or         ->in Query context  【relevance score】
+            ---------------------------------------------------------------
+            must_not => not       ->in filter context 【constant score 】
+            filter
+        
+
+        boosting query             （重要是如何计算score）
+        constant_score query
+        dis_max query
+   
+
+Query-Filter-context
+    https://www.elastic.co/guide/en/elasticsearch/reference/current/query-filter-context.html#relevance-scores
+
+    query context  default 
+        deciding whether or not the document matches, the query clause also calculates a relevance score in the _score meta-field
+        Query context is in effect whenever a query clause is passed to a query parameter
+
+    filter contex
+        deciding whether or not the document matches, no scores are calculated 【constant_score】
+        Filter context is in effect whenever a query clause is passed to a filter parameter 【by Compound query clauses swift】
+
+AST
+                                           query
+
+                                           bool
+
+                    filter                                           must
+
+    publish_date range   status term published        content match xxx  title match_phrase
+
+              and+  
+         or*       a1
+      b3    c5
+
+         
+聚合 
+    http://www.elastic.co/guide/cn/elasticsearch/guide/current/aggs-high-level.html
+
+
+
+
+
+三维    八叉树                   
+                二叉树          
+                KDtree      K-D-Btree         Rtree 
+
+二维    四叉树
+        Geohash
+
+
+一维        二叉树                              Btree
+
+
+
+https://github.com/halfrost/Halfrost-Field
+https://skipperkongen.dk/files/spatialtrees_presentation.pdf
+https://stackoverflow.com/questions/4326332/what-is-the-difference-between-a-kd-tree-and-a-r-tree
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+https://zhuanlan.zhihu.com/p/81273236
+
+磁盘 扇区 =》 文件系统 块 =》InnoDB 页 / es segment 
+
+https://www.zhihu.com/question/23395090/answer/24455833
+POSIX    fsync mmap 
+
+InnoDB
+    https://zhuanlan.zhihu.com/p/25396263
+    https://zhuanlan.zhihu.com/p/48327345
+
+es
+
+    shared                           node
+
+    s0          p0  r0 
+
+    s1          p1  r1              [p0 r1]     [p1 r2]     [p2 r0]    
+
+    s2          p2  r2
+
+    https://elasticsearch.cn/article/6178
+    https://juejin.im/post/5d39a5a2f265da1ba252a55f
+    https://liuzhihang.com/2019/03/12/elasticsearch-data-writing-process.html
+    https://www.bogotobogo.com/Hadoop/ELK/ELK_Elastic_Search_Tutorial.php
+    https://www.cnblogs.com/hello-shf/p/11553317.html
+    https://www.easyice.cn/archives/323?utm_source=tuicool&utm_medium=referral
+    https://www.cnblogs.com/Alandre/p/11358954.html
+    https://www.cnblogs.com/forfuture1978/archive/2010/03/06/1679501.html
+
+
+
+
+------浮点数相关------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+http://www.delphigroups.info/2/52/412021.html
+http://forums.digital-metaphors.com/discussion/7746/round-precision-problem
+https://zhidao.baidu.com/question/1239797789414247099.html
+https://stackoverflow.com/questions/26962575/round-half-to-even-on-decimal#
+http://www.xbeat.net/vbspeed/i_BankersRounding.htm
+
+
+1   
+    the finite precision of floating point values 
+
+                原码         反码          补码
+    正数+7    00000111  =  00000111  =   00000111
+    
+    负数-7    10000111     11111000      11111001 
+
+    http://c.biancheng.net/view/314.html
+    https://www.zhihu.com/question/266361072/answer/364022235
+    http://www.ruanyifeng.com/blog/2010/06/ieee_floating-point_representation.html
+
+
+
+2
+    Standard rounding    
+    Bankers Rounding     
+
+
+
+https://www.zhihu.com/question/28632072
+https://zhuanlan.zhihu.com/p/33333351
+http://bartaz.github.io/ieee754-visualization/
+https://docs.python.org/zh-cn/3/tutorial/floatingpoint.html  2.675  样例31
+https://github.com/bartaz/ieee754-visualization#ieee-754-double-precision-floating-point-visualization
+
+
+                0和1       
+
+与AND   与非门 
+        或非门                               
+或OR             半加器    全加器    加法   减法(取反，加法)
+        异或                               乘法(移位，逻辑判断，累加)
+非NOT                                      除法(移位，逻辑判断，累减)
+
+运算
+控制
+数据
+
+
+
+                                                   
+                                                                 实数科学计数法
+    
+                             组合数
+0 1 2 3 4 (5) 6 7 8 9  [10]  单音shi  11  12  13         a×10^b     1≤|a|<10      指数每+y，小数点都会左移y位，对应数 x10
+                             取0进1                      2*10^2                   2 小数点都会移第2位 得200
+            5.1                                          5.1 * 10^0  
+
+                                                      
+
+         组合数                                             
+0 1 [10] 单音er  11 100  (101)                           a×10^b     1≤|a|<10      指数每+y，小数点都会左移y位，对应数 x10
+         取0进1                                          [10]*[10]^10             10 小数点都会第10位 得1000
+                                                     
+
+        [ 5 ] . [ 1 ] 
+
+        101     0.0 0011 0011...0011..(0011无限循环)  
+
+            101.0 0011 0011.....0011..(0011无限循环)  
+
+                                                        1.010 0011 0011......0011...... (0011无限循环)  2^-2
+
+
+                                                        双精度存入内存 有限化
+
+                                                        1.010001100110011001100110011001100110011001100110011 0011 0011 (0011无限循环) * 2^-2
+
+                                                        1.010001100110011001100110011001100110011001100110011 0 * 2^-2
+
+
+                                                        0,                                                                   s  5.1是正数，所以符号位是0；  
+                                                        10000000001                                                          E  指数E = 2 + 1023 = 1025   阶码
+                                                        010 0011 0011 0011 0011 0011 0011 0011 0011 0011 0011 0011 0011 0    M  双精度存入内存 有限化 排查第一个1   尾数（有效数字）
+
+                                                        (-1)^s  * 2^E *  M
+
+
+php的 BCMath        https://github.com/xinliangnote/PHP
+c# mysql decimal的  https://www.zhihu.com/question/275471150/answer/381843960  https://zhuanlan.zhihu.com/p/60952919
+http://rvelthuis.de/articles/articles-floats.html https://www.cnblogs.com/findumars/
+https://blog.youxu.info/2014/06/10/postscript/
+
+
+
+
+
+
+-------编码加密相关--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+编码算法 一一对应
+
+    URL编码和Base64编码都是编码算法，它们不是加密算法；
+
+    URL编码的目的是把任意文本数据编码为%前缀表示的文本，便于浏览器和服务器处理；
+
+    Base64编码的目的是把任意二进制数据编码为文本，但编码后数据量会增加1/3。
+
+
+哈希算法 （Hash）又称摘要算法（Digest）
+
+    相同的输入一定得到相同的输出；
+    不同的输入大概率得到不同的输出。
+    哈希算法的目的就是为了验证原始数据是否被篡改。
+
+
+对称加密算法
+
+    secret  = encrypt(key, message);
+    message = decrypt(key, secret);
+
+
+非对称加密算法  非对称加密就是加密和解密使用的不是相同的密钥，只有同一个公钥-私钥对才能正常加解密；
+    
+    通常是用公钥加密，私钥解密
+    secret  = encrypt(publicKey, message)
+    message = decrypt(privateKey, secret)
+
+    或
+
+    私钥加密，那相当于所有人都可以用公钥解密.  私钥加密得到的密文实际上就是数字签名 防止伪造抵赖篡改 ; 私钥就相当于用户身份 而公钥用来给外部验证用户身份.
+    signature = encrypt(privateKey, sha256(message))  
+    sha256(message) = decrypt(publicKey, signature)
+
+    
+数字证书  存储的是公钥,以及相关的证书链和 数字签名算法信息   publicKey + 明文message +  signature = encrypt(privateKey, sha256(message))  
+
+    以HTTPS协议为例，浏览器和服务器建立安全连接的步骤如下：
+
+    浏览器向服务器发起请求，服务器向浏览器发送自己的数字证书；
+    浏览器用操作系统内置的Root CA来验证服务器的证书是否有效，如果有效，就使用该证书存储的公钥加密一个随机的AES口令并发送给服务器；https://www.jianshu.com/p/44a3efae1d84
+    服务器用自己的私钥解密获得AES口令，并在后续通讯中使用AES加密。
+
+
+
+
+
+
+---------utf8编码----------------------------------------
+
+
+http://www.regexlab.com/zh/encoding.htm
+https://codepoints.net/U+20BB7
+https://stackoverflow.com/questions/36527642/difference-between-codepointat-and-charcodeat
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt
+https://developer.mozilla.org/zh-CN/docs/Web/API/Blob/Blob
+https://baike.baidu.com/item/Unicode/750500?fr=aladdin
+https://stackoverflow.com/questions/6986789/why-are-some-bytes-prefixed-with-0xf7-when-using-charset-x-user-defined-with-xm
+
+
+       [97, 63460, 63416, 63405, 63472, 63392, 63406, 63415]
+        61  f7e4   f7b8   f7ad   f7f0   f7a0   f7ae   f7b7   This is a Private Use codepoint //https://codepoints.net/U+f7ad   
+            
+
+a中𠮷   61 . E4     B8     AD .   F0     A0     AE     B7   -> 
+
+
+
+                                                                                      
+          Unicode编码                        Unicode编码标准具体实现内存中byte
+                （ code point ）            UTF-8                 UTF-16
+字符 十进制编号     十六进制                  
+
+                  \x{61}
+a    97           \u{61}                    61                    00 61 （ code units ）
+
+                  \x{4E2D}
+中   20013        \u{4E2D}                  E4 B8 AD              4E 2D
+
+
+-----65535---------\x{FFFF}----------
+
+
+                  \x{20BB7}
+𠮷   134071       \u{20BB7}                 F0 A0 AE B7           D8 42 DF B7
+                                                                  js/java \uD842\uDFB7
+
+注意不是吉祥的吉.𠮷
+
+var str = "a中𠮷" 
+
+var len = str.length   4      //The length property of a String object indicates the [length] of a string, in UTF-16 [code units]
+
+"a  中  𠮷"
+[0][1][23]
+
+console.log( str.charCodeAt(2).toString(16))    //d842    //returns an integer between 0 and 65535 representing the UTF-16 [code unit] at the given index.
+console.log( str.charCodeAt(3).toString(16))    //dfb7
+
+console.log( str.codePointAt(2).toString(16) )  //20bb7    //returns a non-negative integer that is the Unicode [code point] value.
+console.log( str.codePointAt(3).toString(16) )  //dfb7     //If no UTF-16 surrogate pair begins at pos, the code unit at pos is returned.
+
+var byteLen = new Blob([str]).size  8   //DOMStrings会被编码为UTF-8。
+
+
+
+
+
+
+-----C语言 LINUX相关-------------------------------------------------------------------------------------------------------------------------------------
+
+https://segmentfault.com/a/1190000015557812
+https://segmentfault.com/a/1190000015676964
+https://segmentfault.com/a/1190000015726535
+《C专家编程》
+https://segmentfault.com/a/1190000004684615
+
+
+
+关键字             生命周期                       作用域(可见性)
+
+extern            全局静态（程序结束后释放）       外部（整个程序）
+static	          全局静态（程序结束后释放）       内部（仅编译单元，一般指单个源文件）
+auto,register     函数调用（调用结束后释放）       函数
+
+
+位置/作用域/生命周期/单多次赋值  类型内存大小  名称
+
+
+
+
+----数据结构 算法相关----------------------------------------------------------------------------------------------------------------
+
+DFS
+深度遍历图的节点
+从节点A出发，那些节点是可达的
+
+   隐含的代码栈
+   procedure DFS(G,v):
+      label v as discovered
+      for all directed edges from v to w that are in G.adjacentEdges(v) do
+          if vertex w is not labeled as discovered then
+              recursively call DFS(G,w)
+
+
+  明确的数据栈
+  procedure DFS-iterative(G,v):
+      let S be a stack
+      S.push(v)
+      while S is not empty
+          v = S.pop()
+          if v is not labeled as discovered:
+              label v as discovered
+              for all edges from v to w in G.adjacentEdges(v) do 
+                  S.push(w)
+
+
+
+
+BFS   
+广度遍历图的节点
+从节点A出发，有前往节点B的路径吗？ 从节点A出发，前往节点B的哪条路径最短
+
+ 明确的数据队列
+ procedure BFS(G,start_v):
+    let Q be a queue
+    label start_v as discovered
+    Q.enqueue(start_v)
+    while Q is not empty
+        v = Q.dequeue()
+        if v is the goal:
+            return v
+        for all edges from v to w in G.adjacentEdges(v) do
+            if w is not labeled as discovered:
+                label w as discovered
+                w.parent = v
+                Q.enqueue(w) 
+
+  隐含的代码队列 ？
+
+
+
+
+
+
+
+
+迭代：  不断重复进行某一运操作（分解）。   while for
+        可选的把前一次运算结果 代入运算式进行下一次运算（依赖）。
+        要解决最终的问题，必须先解决一个一开始的的问题，把开始的问题当做下个问题的输入，继续解决下个问题，再把下个问题的答案当做下下个问题的输入...直到解决最终的问题。
+
+从原子问题到问题 自底向上实现
+                
+                                                                                                
+                阶乘                                      
+                斐波那契    
+                n阶楼梯，每次可爬1阶或2阶   
+                sum 1+2+3+...+100      
+                欧几里德算法   牛顿迭代
+                翻转字符串     
+                PartitionOrder性质分组 (分割/循环不变式)     快排   
+                BinSearch 二分查找 
+                Enumerating  Traversal  yield (数据方面)
+                不同问题用不同方式思考更方便
+
+                1+2=2+1=3     时空
+                1-2 =！2-1    时空依赖
+                
+                                   
+递归： 一个运算（操作），可以通过不断调用本身形式（分解），往往需要通过前一次的结果来得到当前运算的结果（依赖），因而，程序运行时，总是先一次次地「回溯」前一次的结果  func（）{  func（） }
+      从所需结果出发不断回溯前一运算直 到回到初值再递推得到所需结果。
+      要解决最终的问题，必须先解决一个比最终问题小的问题，要解决比现有问题小的问题，必须要解决一个更小的问题...以此类推，直到最小的问题被解决，再一层层把结果传递回来，解决最终的问题。
+      【边际分析 数学归纳】
+
+从原问题逐渐缩小到原子问题 返回到原问题   自上而下再到上
+
+
+https://blog.csdn.net/mengxiangjia_linxi/article/details/78158819
+https://my.oschina.net/hosee/blog/616968
+
+#递归
+def fib1(n):
+    if n==0:
+        return 0
+    elif n==1:
+        return 1
+    else:
+        return fib1(n-1) + fib1(n-2)
+
+
+memo = {0:0, 1:1}
+def fib2(n):
+    if not n in memo:
+        memo[n] = fib2(n-1)+fib2(n-2)
+    return memo[n]
+
+
+
+#迭代 
+memo = {0:0, 1:1}
+def fib3(n):
+    for i in range(2,n): 
+        memo[i] = memoa[i-1] + memo[i-2] ;
+    return memo[n]
+
+def fib3(n):
+    a, b = 0, 1
+    for i in range(n):     
+        a, b = b, a+b
+    return a              
+
+range(n)   = [0..n-1] = [0..n)   
+range(2,n) = [2..n-1] = [2..n)
+
+
+int fib2(int n) {
+	int a = 0,  b = 1,  i = 0, 
+        next_a, next_b, next_i;    //(a, b, i) 构成一个状态
+	while(true) {
+		if(i >= n) {
+			break;
+		}
+		else {
+			next_a = b; //根据当前状态计算下一个状态 //尾递归<-->迭代（循环不变式）
+			next_b = a + b;
+			next_i = i + 1;
+			a = next_a; //更新当前状态
+			b = next_b;
+			i = next_i;
+		}
+	}
+	return a;
+}
+
+int fib3(int n) {
+	std::function<int(int, int, int)> iter;
+	iter = [n, &iter](int a, int b, int i) {
+		if(i >= n) {
+			return a;
+		}
+		else {
+			return iter(b, b + a, i + 1);
+		}
+	};
+	return iter(0, 1, 0);
+}
+https://blog.csdn.net/ioriogami/article/details/12782141
+
+                                     
+                         a3           
+           a2            b2=a1+b1             
+     a1    b1=a0+b0       
+a0   b0  
+0    1     1             2            
+
+
+function t (label, count, st, results){
+    dbData =  select * from t where label = label start from st*10 limt 10
+    excludeData = exclude(dbData)
+    results = results + excludeData
+     
+    if(results=count)
+        return results
+    if(results>count)
+        return resuls.slice(0,10)
+     
+    t (label, count, st, results)
+}
+
+
+function t (){
+   label=label
+   count=count 
+   st = 0
+  
+   while(true){
+        dbData =  select * from t where label = label start from st*10 limt 10
+        excludeData = exclude(dbData)
+        results = results + excludeData
+
+        if(results=count)
+          return results
+        if(results>count)
+          return resuls.slice(0,10)
+
+        
+        label=label
+        count=count 
+        st = st+1
+   }   
+}
+
+
+循环      值不变              等式不变           表达式不变             
+ w     label=label          st_w = w          results_w <= 10
+       count=count    
+
+ 0    
+
+ 1
+
+ 2
+
+ 结束条件
+ results_w == 10
+
+C:\Users\Administrator\IdeaProjects\algs4>java -classpath "C:\Users\Administrator\IdeaProjects\algs4\target\classes" edu.princeton.cs.algs4.BinarySearch ./data/tinyW.txt < ./data/tinyT.txt
+
+https://www.zhihu.com/question/26700198
+https://www.zhihu.com/question/51937543
+https://www.zhihu.com/question/20278387
+
+
+ 
+
+ 声明
+
+
+
+
+
+加密     明文边密文            对称密钥   非对称公私钥
+
+签名     防篡改替换明文                   pri（ h(明) ）              pub（ h(明) ） 
+         中间人                               明                         明
+
+
+
+密钥交换                              rsa 
+                                     签名+dh
+TLS 1.3 uses Diffie-Hellman key exchanges exclusively
