@@ -713,3 +713,14 @@ TLS 1.3 uses Diffie-Hellman key exchanges exclusively
 cow  copy on write         mvcc
 
 WAL Write-Ahead Logging，  REDO允许我们重新进行对数据的修改，UNDO允许我们撤销对数据的修改
+
+
+
+
+strapi tailwindcss    作用域链  块 函(this) 全                     隐含的
+                      原型类链  _pro_       pro和construc          明显的
+                      两个链无关 
+
+　　microtask 和 task 一样严格按照时间先后顺序执行。
+　　microtask 类型的任务包括 Promise callback 和 Mutation callback。
+ 　 当 JS 执行栈为空时，便生成一个 microtask 检查点。
