@@ -90,7 +90,7 @@ https://www.zhihu.com/question/30272728/answer/72476703
 原子性  一个事务内的所有SQL操作是一个整体 要么全成功 要么全失败 redo-log  Undo-log
 持久性  一个事务提交后，对系统的影响是永久的 redo-log    
 
-隔离性  多个事务间并发 不同隔离级别 适当的破坏一致性来提升性能与并行度   锁   MVVC[Undo-log]
+隔离性  多个事务间并发 不同隔离级别 适当的破坏一致性来提升性能与并行度   锁   MVVC[Undo-log]       解决并发本质上有  快照  队列   锁 三种
         Read Uncommitted  =》 Read Committed =》 Repeated Read =》 Serialization 
        
 
@@ -724,3 +724,8 @@ strapi tailwindcss    作用域链  块 函(this) 全                     隐含
 　　microtask 和 task 一样严格按照时间先后顺序执行。
 　　microtask 类型的任务包括 Promise callback 和 Mutation callback。
  　 当 JS 执行栈为空时，便生成一个 microtask 检查点。
+
+
+
+
+
