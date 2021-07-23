@@ -850,7 +850,7 @@ The primary      of any database management system          reliably storing dat
 多量纲的相对比值是有意义的   如 1m/1s 
                                                 能量的最小单位
  .                                              J·s(焦耳乘秒)              统一能量温度
-多量纲的绝对比值是有意义的  重要的  如  光速常数C   普朗克常数h    引力常数G    波尔兹曼常数     磁导介电常数
+多量纲的绝对比值是有意义的  重要的  如  光速常数C   普朗克常数h    引力常数G    波尔兹曼常数     磁导介电常 数
  .                                     m/s                     N·m²/kg²
                                                                F=ma
                                                                m³/kg·s²
