@@ -82,6 +82,12 @@ SERIALIZABLE
 ACID四个特性
 https://www.zhihu.com/question/31346392/answer/362597203
 https://www.zhihu.com/question/30272728/answer/72476703
+https://zhuanlan.zhihu.com/p/55191995 
+https://www.zhihu.com/question/59729819/answer/284180647
+https://zhuanlan.zhihu.com/p/267143540
+https://www.zhihu.com/question/357887214
+https://zhuanlan.zhihu.com/p/172530683
+https://zhuanlan.zhihu.com/p/240745429
 
 一致性  而事务具备ACID里C的特性是说通过事务的AID来保证我们的一致性.
         一个事务事务开始前和结束后 不管成功还是失败 从一个正确的状态,迁移到另一个正确的状态
@@ -90,15 +96,20 @@ https://www.zhihu.com/question/30272728/answer/72476703
 原子性  一个事务内的所有SQL操作是一个整体 要么全成功 要么全失败 redo-log  Undo-log
 持久性  一个事务提交后，对系统的影响是永久的 redo-log    
 
-隔离性  多个事务间并发 不同隔离级别 适当的破坏一致性来提升性能与并行度   锁   MVVC[Undo-log]       解决并发本质上有  快照  队列   锁 三种
+隔离性  多个事务间并发 不同隔离级别 适当的破坏一致性来提升性能与并行度   锁   MVVC[Undo-log]       解决并发本质上有  快照  锁  队列 三种
         Read Uncommitted  =》 Read Committed =》 Repeated Read =》 Serialization 
        
 
 C  : 一致性是最基本的属性，其它的三个属性都为了保证一致性而存在的
 
-AD : WAL（Write Ahead Log） redo-log物理恢复 Undo-log逻辑事务   Insert undo logs are needed only in transaction rollback   
-                                                              Update undo logs are used also in consistent reads
-I  : 锁   MVVC(copy on write) [Undo-log 反向操作]
+AD : WAL（Write Ahead Log） redo-log物理恢复 Undo-log逻辑事务    Insert undo logs are needed only in transaction rollback   
+                                                               Update undo logs are used also in consistent reads
+I  : 锁   MVVC(copy on write) [Undo-log 反向操作上一步]
+
+
+redo-log  物理磁盘Page的     先反向后正向重做       
+
+Undo-log  逻辑反向语句的     反向的 事务回滚的 
 
 
 写undo的redo
@@ -729,3 +740,15 @@ strapi tailwindcss    作用域链  块 函(this) 全                     隐含
 
 
 
+position   fix        outof文档流 其他盒子当它不存在
+           absoulte
+
+           relative
+           static
+
+                         display    block         可定义高宽      换行
+                                    inline        包裹不可定义    不换行
+                                    inline-block  包裹可定义      不换行
+
+                                     float        outof文档流  其他盒子当它不存在 但内容占空间当期存在  
+                                 
