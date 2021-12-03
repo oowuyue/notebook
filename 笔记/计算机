@@ -379,7 +379,7 @@ https://blog.youxu.info/2014/06/10/postscript/
     sha256(message) = decrypt(publicKey, signature)
 
     
-数字证书  存储的是公钥,以及相关的证书链和 数字签名算法信息   publicKey + 明文message +  signature = encrypt(privateKey, sha256(message))  
+数字证书  存储的是公钥,以及相关的证书链和 数字签名算法信息   publicKey + 明文message +  [ signature = encrypt(privateKey, sha256(message))  ]
 
     以HTTPS协议为例，浏览器和服务器建立安全连接的步骤如下：
 
