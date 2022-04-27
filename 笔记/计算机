@@ -92,25 +92,21 @@ https://zhuanlan.zhihu.com/p/240745429
 一致性  而事务具备ACID里C的特性是说通过事务的AID来保证我们的一致性.
         一个事务事务开始前和结束后 不管成功还是失败 从一个正确的状态,迁移到另一个正确的状态
         多个事务间并发 单个事务开始和结束之间的中间状态不会被其他事务看到
-
 原子性  一个事务内的所有SQL操作是一个整体 要么全成功 要么全失败 redo-log  Undo-log
 持久性  一个事务提交后，对系统的影响是永久的 redo-log    
-
-隔离性  多个事务间并发 不同隔离级别 适当的破坏一致性来提升性能与并行度   锁   MVVC[Undo-log]       解决并发本质上有  快照  锁  队列 三种
+隔离性  多个事务间并发 不同隔离级别 适当的破坏一致性来提升性能与并行度   锁   MVVC[Undo-log]  解决并发（共享可变）有 锁悲观锁 快照乐观锁  队列  三种
         Read Uncommitted  =》 Read Committed =》 Repeated Read =》 Serialization 
        
 
 C  : 一致性是最基本的属性，其它的三个属性都为了保证一致性而存在的
 
-AD : WAL（Write Ahead Log） redo-log物理恢复 Undo-log逻辑事务    Insert undo logs are needed only in transaction rollback   
-                                                               Update undo logs are used also in consistent reads
+AD : WAL（Write Ahead Log） redo-log物理恢复  Undo-log逻辑事务    Insert undo logs are needed only in transaction rollback   
+                                                                 Update undo logs are used also in consistent reads
 I  : 锁   MVVC(copy on write) [Undo-log 反向操作上一步]
 
 
 redo-log  物理磁盘Page的     先反向后正向重做       
-
-Undo-log  逻辑反向语句的     反向的 事务回滚的 
-
+Undo-log  逻辑反向语句的     反向的事务回滚的 
 
 写undo的redo
 写undo
@@ -759,4 +755,85 @@ position   fix        outof文档流 其他盒子当它不存在
                                     inline-block  包裹可定义      不换行
 
                                      float        outof文档流  其他盒子当它不存在 但内容占空间当期存在  
-                                 
+
+
+               连接符号
+语言 正则文法
+
+机器 nfa dfa
+
+
+
+         a(b|c)h*
+
+        
+
+
+
+// Simple Arithmetics Grammar
+// ==========================
+//
+// Accepts expressions like "2 * (3 + 4)" and computes their value.
+
++-    C1 C2 c3     ↙
+* /   B1 B2 b3
+()    A1 A2 A2   
+
+     5 - (2-1) * 3 + 2
+                   ↓  
+     5 - (2-1) * 3   2            
+       ↓
+     5   (2-1) * 3
+               ↓
+         (2-1)   3
+           ↓
+          2 1
+          
+Addsub
+  = head:Muldiv tail:(("+" / "-")Muldiv)* {
+      return tail.reduce( (result, element)=>{
+      	return element[0] === "+" ? result + element[1]: result - element[1];
+      }, head );
+    }
+    
+Muldiv
+  = head:Bracket tail:(("*" / "/")Bracket)* {
+      return tail.reduce( (result, element)=>{
+      	return element[0] === "*" ? result * element[1]: result / element[1];
+      }, head );
+    }
+
+Bracket
+  = "("expr:Addsub")" { return expr; }
+  / Integer
+
+Integer "integer"
+  = [0-9]+ { return parseInt(text(), 10); }
+
+
+
+    is
+he      tom  
+               is 
+            who  a teacher
+
+
+
+
+        一元(隐含二元) 二元关系                                           名词
+         
+in of   时空 因果 目的手段 属性范畴
+
+be      分析命题 人为定义  
+
+has can 可分属性 内属性
+                                                                        hope
+hope do strike  动词能量                                                apple                               
+
+hopefully hopeful 副词形容词   
+quickly   quick  
+
+
+I hopefully hope the hope of tom is hopful
+
+The purpose of programming is to create a program that demonstrates a certain desired behaviour.
