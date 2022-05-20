@@ -757,17 +757,17 @@ The primary      of any database management system          reliably storing dat
 无量纲的绝对比值是有意义的  重要的  如  精细结构常数
 
 
-h普朗克常数；c光速常数 = ω频率 * λ波长；  v速度  γ洛伦兹因子=1/√[1-(v/c)²]    M(动质量 相对论质量) =  γ * m质量(静质量 固有内禀属性 不随参考系变换的洛伦兹不变量)        
+h普朗克常数；c光速常数 = ω频率 * λ波长；  v速度  γ洛伦兹因子=1/√[1-(v/c)²]    m质量(静质量 固有内禀属性 不随参考系变换的洛伦兹不变量)    M(多余概念 动质量 相对论质量) =  γ*m    
 
                       玻色子 绝对运动                   费米子 相对运动 相对静止                     
 
-     s         E   hω   h*c/λ  Pc         Mc² (γ*m)c²  √[p²c²+m²c⁴]  动能(势能) + 净能                
-F                    
-     t         P   h/λ  h*ω/c  E/c        Mv  (γ*m)v   
+     s         E   hω   h*c/λ  Pc         (γ*m)c² m*γc²      √[p²c²+m²c⁴]  动能(势能) + 净能                
+F    v a                
+     t         P   h/λ  h*ω/c  E/c        (γ*m)v  m*(γv)    
                   
 F=dP/dt=dE/ds                      Pc²/E=v           https://zhidao.baidu.com/question/572221678.html  https://www.zhihu.com/question/520326143 
    ↓                                                 https://zhidao.baidu.com/question/308245126.html?qbl=relate_question_6
-F=m a=m d(γv)/dt   
+F=m*a=m*d(γv)/dt   
 
 直观--> 本质  <------------------------------- 直观                
       时空对称 
