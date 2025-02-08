@@ -27,36 +27,6 @@
     <script type="text/javascript" src="./us/PMI_ISM,金融脉动增速.js"></script>
     <script type="text/javascript" src="./us/Y10日,Y2日.js"></script>
     <script type="text/javascript">
-        /*
-        11各类资产的长期回报率是多少?  https://deepinvest.org/post/2022/09/05/the-rate-of-return-on-everything/   
-        巴菲特的估值逻辑与茅台的确定性  https://shoucang.zyzhang.com/%e5%b7%b4%e8%8f%b2%e7%89%b9%e7%9a%84%e4%bc%b0%e5%80%bc%e9%80%bb%e8%be%91%e4%b8%8e%e8%8c%85%e5%8f%b0%e7%9a%84%e7%a1%ae%e5%ae%9a%e6%80%a7/
-        净利润同比增长率(%)中位数 https://legulegu.com/stockdata/middle-avg-indicator?indicatorCode=netProfitYoy                           
-                                   上5 
-        ppi      下0         上0         高位区5下
-        利亏     利下0       利上0        亏上0
-    
-        股市     低点        M高点1       M高点2       5-6  10-12-1-2月底
-                     白马科技 红低PPI-能粮消金CPI        3年左右 
-
-        pmi      低位        高位         高中位
-        信贷     低位        高位         中下位
-        美元     低位        中上位        高位
-
-
-
-        一般        一个底部              顶部1                    顶部1
-
-        P          下穿0 减速带最大     上穿0 加速度最大          高位5向下
-        利润       下穿0 减速带最大      上穿0 加速度最大           
-        亏损                                                    上穿0 加速度最大
-         
-        股债          低位                中上|顶                 顶|中下
-
-        Q
-        MV         内外最底部            内M最大_信贷&M1          外M最大_汇率
-
-        */
-        console.log("cn数据抓取日期=", cn抓取日期)
 
         let PPI_MA = PPI.chartDataMaN(4)
 
@@ -1251,7 +1221,7 @@
                 },
 
 
-            
+
                 { //股同比
                     name: "300同比",
                     type: "line",
@@ -1722,7 +1692,7 @@
                 name: "上证"
             });
 
-    
+
 
             myChart.dispatchAction({
                 type: 'legendToggleSelect',
@@ -1780,27 +1750,7 @@
         }, "1")
 
 
-        window.onload = () => {
-            window.onresize = function (e) {
-                //console.log("window.innerHeight",window.innerHeight) 
-                if (window.innerHeight >= 767) {  //880
-                    option.grid = grid全屏
-                    myChart.setOption(option)
-                    myChart.dispatchAction({
-                        type: 'legendSelect',
-                        name: "300同比"
-                    });
 
-                } else if (window.innerHeight < 767) {
-                    option.grid = grid默认
-                    myChart.setOption(option)
-                    myChart.dispatchAction({
-                        type: 'legendUnSelect',
-                        name: "300同比"
-                    });
-                }
-            }//onresize
-        }
     </script>
 </body>
 
